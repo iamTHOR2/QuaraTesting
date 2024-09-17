@@ -2,6 +2,7 @@ package QuaraTest;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.Scanner;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -9,6 +10,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,9 +22,22 @@ import org.slf4j.LoggerFactory;
 public class QuaraMain {
 
     private static final Logger logger = LoggerFactory.getLogger(QuaraMain.class);
-
+    public static WebDriver driver;
     public static void main(String[] args) {
-        WebDriver driver = new ChromeDriver();
+    	System.out.println("Enter the browser: Chrome/Edge");	
+    	Scanner sc = new Scanner(System.in);
+    	String browserName = sc.nextLine();
+    	
+    	// Launching https://www.air.irctc.co.in/ in  web browser
+    	if(browserName.equalsIgnoreCase("chrome")) {
+    	driver = new ChromeDriver();
+    	}
+    	else if(browserName.equalsIgnoreCase("edge")) {
+    	driver = new EdgeDriver();
+    	}
+    	else {
+    		System.out.println("Enter correct browser!");
+    	}
 
         try {
             driver.get("https://www.quora.com/profile/Quora");
@@ -44,7 +60,7 @@ public class QuaraMain {
             password.sendKeys("Mankind1@");
 
             // Click on the submit button
-            WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class,'bobc9nh b1cg7ppz c1nud10e qu-active--textDecoration--none qu-focus--textDecoration--none qu-borderRadius--pill qu-alignItems--center qu-justifyContent--center qu-whiteSpace--nowrap qu-userSelect--none qu-display--inline-flex qu-bg--blue qu-tapHighlight--white qu-textAlign--center qu-cursor--pointer qu-hover--textDecoration--none')]")));
+            WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(text(),'Login')]")));
             submitButton.click();
             
             WebElement searchBox = wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='Search Quora']"))));
