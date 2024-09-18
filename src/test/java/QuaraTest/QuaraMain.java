@@ -5,15 +5,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
-import java.util.Scanner;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -32,6 +29,7 @@ public class QuaraMain {
             prop.load(fis);
         } catch (IOException e) {
             logger.error("Failed to load properties file", e);
+            return;
         }
 
         String browserName = prop.getProperty("browser");
@@ -39,13 +37,9 @@ public class QuaraMain {
         String email = prop.getProperty("email");
         String password = prop.getProperty("password");
 
-        // Launching the web browser
-        if (browserName.equalsIgnoreCase("chrome")) {
-            driver = new ChromeDriver();
-        } else if (browserName.equalsIgnoreCase("edge")) {
-            driver = new EdgeDriver();
-        } else {
-            System.out.println("Enter correct browser!");
+        // Driver Setup
+        driver = DriverSetup.getDriver(browserName);
+        if (driver == null) {
             return;
         }
 
@@ -54,9 +48,9 @@ public class QuaraMain {
             driver.manage().window().maximize();
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-            // Click on the login button
-            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='q-box qu-flex--auto']/following::button")));
-            loginButton.click();
+            // Click on the signIn button
+            WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='q-box qu-flex--auto']/following::button")));
+            signInButton.click();
 
             // Click on the Login option
             WebElement loginOption = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[normalize-space()='Login']")));
@@ -101,14 +95,13 @@ public class QuaraMain {
 
             WebElement next = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Next')]")));
 
+            // Capturing ScreenShot
             if (show.isDisplayed() != false) {
                 TakesScreenshot ts = ((TakesScreenshot) driver);
-
                 File file = ts.getScreenshotAs(OutputType.FILE);
-
                 File saveFile = new File("C:\\Users\\2319695\\OneDrive - Cognizant\\Desktop\\image1.jpg");
-
                 FileHandler.copy(file, saveFile);
+
             } else {
                 next.click();
             }
