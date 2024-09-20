@@ -57,37 +57,42 @@ public class QuaraMain {
             loginOption.click();
 
             // Enter login credentials
-            WebElement login = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='email']")));
-            login.sendKeys(email);
-
+            WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='email']")));
+            emailField.sendKeys(email);
             WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='password']")));
             passwordField.sendKeys(password);
 
             // Click on the submit button
             WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(text(),'Login')]")));
             submitButton.click();
-
+            
+            //Sending text in Search Box
             WebElement searchBox = wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='Search Quora']"))));
             searchBox.sendKeys("Testing");
-
-            WebElement testClick = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='q-text qu-color--gray_light']")));
-            testClick.click();
-
+            
+            //Click on search result (first option)
+            WebElement clickOnSearchResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='q-text qu-color--gray_light']")));
+            clickOnSearchResult.click();
+            
+            //Verifying the result and displayed result
             WebElement resultCheck = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='q-box qu-borderBottom qu-pt--small qu-pb--small qu-bg--raised']//div[@class='q-text qu-dynamicFontSize--regular qu-medium qu-color--gray_dark qu-passColorToLinks']")));
             System.out.print("Verifying the Displayed: " + resultCheck.getText());
-
+            
+            //Clicking on profile for logout
             WebElement profileClick = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='q-box qu-borderRadius--circle qu-borderAll qu-borderColor--darken']")));
             profileClick.click();
-
             WebElement logout = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Logout')]")));
             logout.click();
 
+            //Click on "Sign up with email"
             WebElement signEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Sign up with email')]")));
             signEmail.click();
 
+            //Entering demo username
             WebElement enterUserName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='profile-name']")));
             enterUserName.sendKeys("iamTHOR2");
 
+            //Entering invalid email
             WebElement enterEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='q-box qu-px--medium qu-pt--small qu-pb--medium']//input[@id='email']")));
             enterEmail.sendKeys("abc@abc");
 
